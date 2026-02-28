@@ -3,8 +3,10 @@ const sitemapPlugin = require('@quasibit/eleventy-plugin-sitemap');
 const htmlmin = require('html-minifier-terser');
 
 module.exports = function (eleventyConfig) {
-  eleventyConfig.addPassthroughCopy('src/assets');
-  eleventyConfig.addPassthroughCopy('src/admin');
+  eleventyConfig.addPassthroughCopy('style.css');
+  eleventyConfig.addPassthroughCopy('styles.css');
+  eleventyConfig.addPassthroughCopy('script.js');
+  eleventyConfig.addPassthroughCopy('admin');
   eleventyConfig.addPassthroughCopy('robots.txt');
 
   eleventyConfig.addFilter('postDate', (dateObj) => {
