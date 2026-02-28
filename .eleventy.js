@@ -12,13 +12,30 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter('postDate', (dateObj) => {
     return DateTime.fromJSDate(dateObj).toFormat('dd LLL yyyy');
   });
-
-  eleventyConfig.addCollection('blog', (collectionApi) => {
+  eleventyConfig.addFilter('slug', function (str) {
+    return str.toLowerCase().replace(/\s+/g, '-');
+  });
+  eleventyConfig.addCollection('blog', function (collectionApi) {
     return collectionApi
-      .getFilteredByGlob('content/blog/*.md')
+      .getFilteredByGlob('blog/**/index.html')
       .sort((a, b) => b.date - a.date);
   });
-
+  eleventyConfig.addCollection('allBlogCategories', function (collectionApi) {
+    const posts = collectionApi.getFilteredByGlob('blog/**/index.html');
+    const categories = new Set();
+    posts.forEach(p => {
+      if (p.data.category) categories.add(p.data.category);
+    });
+    return [...categories];
+  });
+  eleventyConfig.addCollection('allBlogTags', function (collectionApi) {
+    const posts = collectionApi.getFilteredByGlob('blog/**/index.html');
+    const tags = new Set();
+    posts.forEach(p => {
+      if (p.data.tags) p.data.tags.forEach(t => tags.add(t));
+    });
+    return [...tags];
+  });
   eleventyConfig.addTransform('htmlmin', function (content, outputPath) {
     if (
       process.env.NODE_ENV === 'production' &&
