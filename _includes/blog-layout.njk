@@ -34,7 +34,7 @@
         <a href="/blog/" class="active">Blog</a>
         <a href="/aboutus/">About</a>
         <a href="/contactus/">Contact</a>
-        <a href="#" onclick="toggleDark()">🌙</a>
+        <a href="#" id="darkToggle" onclick="toggleDark()">🌙</a>
       </nav>
     </div>
   </header>
@@ -92,12 +92,16 @@
   <script src="/script.js" defer></script>
   <script>
     function toggleDark() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('darkMode', isDark);
+      const btn = document.getElementById('darkToggle');
+      if (btn) btn.textContent = isDark ? '☀️' : '🌙';
     }
-    window.addEventListener('load', () => {
+    window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark');
+        const btn = document.getElementById('darkToggle');
+        if (btn) btn.textContent = '☀️';
       }
     });
   </script>
